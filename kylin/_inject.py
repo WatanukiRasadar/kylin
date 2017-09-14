@@ -1,6 +1,6 @@
 from types import FunctionType
 from functools import wraps
-from _context import Context
+from ._context import Context
 
 class Inject:
   
