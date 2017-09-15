@@ -21,7 +21,9 @@ class Context:
       decorators = self.get_decorators(name, service).get(self.scope)
       if decorators:
         for decorator in reversed(decorators.copy()):
-          instance = self['%s.factory' % decorator].create(decorated=instance)
+          name_factory = '%s.factory' % decorator
+          decorator_factory = self[name_factory] if name_factory in self.__class__.services.keys() else self['kylin.decorator.factory']
+          instance = decorator_factory.create(decorator=self[decorator],decorated=instance)
     return instance
 
   def get_decorators(self, name: str, service: Type) -> Dict[Scope, List[str]]:
