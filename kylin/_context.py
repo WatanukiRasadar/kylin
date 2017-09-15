@@ -1,6 +1,7 @@
 from threading import current_thread
 from weakref import WeakKeyDictionary
-from typing import Type
+from typing import Type, Dict, List
+from ._scope import Scope
 
 class Context:
   
@@ -9,14 +10,22 @@ class Context:
   
   def __init__(self):
     self.services = {}
+    self.scope = getattr(self,'scope',Scope.build_class().DEFAULT)
   
   def __getitem__(self, name: str):
     return self.services.get(name) or self.instaciate(name, self.__class__.services.get(name))
   
   def instaciate(self,name: str, service: Type):
     instance = service()
-    self.services[name] =  instance
+    if instance:
+      decorators = self.get_decorators(name, service).get(self.scope)
+      if decorators:
+        for decorator in reversed(decorators.copy()):
+          instance = self['%s.factory' % decorator].create(decorated=instance)
     return instance
+
+  def get_decorators(self, name: str, service: Type) -> Dict[Scope, List[str]]:
+      return service._decorators
   
   def __new__(cls, *args, **kwargs):
     thread = current_thread()

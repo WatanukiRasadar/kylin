@@ -9,10 +9,11 @@ class Inject:
   
   def __call__(self, fun: FunctionType) -> FunctionType:
     @wraps(fun)
-    def injector(**runtime_injections):
+    def injector(*args, **runtime_injections):
       context = Context()
       injections = {}
       for param, name in self.dependencies.items():
-        injections[name] = runtime_injections.get(name) or context[name]
-      return fun(injections)
+        injections[param] = context[name]
+      injections.update(runtime_injections)
+      return fun(*args, **injections)
     return injector
