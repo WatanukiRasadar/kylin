@@ -2,11 +2,11 @@ from distutils.core import setup
 
 setup(
     name='kylin',
-    version='0.1',
+    version='1.0',
     packages=['kylin'],
     url='',
     license='MIT',
     author='Elielton Kremer',
-    author_email='elieltonk@gmail.com',
-    description='Dependency injector'
+    author_email='elielton@uoou.com.br',
+    description='A Quart CDI implementation'
 )

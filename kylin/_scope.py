@@ -1,22 +1,27 @@
-from enum import Enum
+from quart import g
 
-SCOPES = {
-    'DEFAULT': 'default'
-}
+from ._context import Context
+from ._exceptions import ServiceNotFoundException
 
-CACHE = None
 
-class Scope:
+class Scope(Context):
+    """
+        class to register scopes of application
+        is singleton to request
+    """
 
-    @classmethod
-    def register(cls, name:str, value:str):
-        global SCOPES
-        SCOPES[name] = value
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.context = Context()
 
-    @classmethod
-    def build_class(cls):
-        global SCOPES
-        global CACHE
-        if not CACHE:
-            CACHE = Enum('Scope', SCOPES)
-        return CACHE
+    def __getitem__(self, item: str):
+        if item not in self.keys() and item in self.context.keys():
+            self[item] = self.context[item]()
+        if item not in self.keys():
+            raise ServiceNotFoundException(item)
+        return super().get(item)
+
+    def __new__(cls, *args, **kwargs):
+        if not hasattr(g, '__scope__'):
+            g.__scope__ = dict.__new__(cls)
+        return g.__scope__
