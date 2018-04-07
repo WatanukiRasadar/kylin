@@ -9,7 +9,7 @@ T = TypeVar('T')
 class Factory(Generic[T]):
     """
     Generic factory
-    and class to data instancations
+    and class to data instantiation
     Need a validator_prefix to identify a data validation
     """
 
@@ -24,7 +24,7 @@ class Factory(Generic[T]):
     async def create(self, *args, **kwargs) -> Union[T, Dict[AnyStr, List[AnyStr]]]:
         valid = await self.validate(*args, *kwargs)
         if valid is True:
-            return self.klzz(*args, await self.clean(**kwargs))
+            return self.klzz(*args, **(await self.clean(**kwargs)))
         return valid
 
     async def validate(self, *args, **kwargs) -> Union[bool, Dict[AnyStr, List[AnyStr]]]:
