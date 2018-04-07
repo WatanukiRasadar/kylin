@@ -21,7 +21,8 @@ class Injector(Callable):
         injections = {}
         for dependency_name, service_name in self.dependencies.items():
             injections[dependency_name] = kwargs.get(dependency_name) or self.scope[service_name]
-        return self.fun(*args, **injections)
+        kwargs.update(injections)
+        return self.fun(*args, **kwargs)
 
 
 class Inject(Callable):
