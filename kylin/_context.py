@@ -4,11 +4,9 @@ class Context(dict):
         is a singleton to application
     """
 
-    __instance__ = None
+    __instance = None
 
     def __new__(cls, *args, **kwargs):
-        if cls.__instance__ is None:
-            cls.__instance__ = super().__new__(cls) if super().__new__ is object.__new__ else super().__new__(cls,
-                                                                                                              *args,
-                                                                                                              **kwargs)
-        return cls.__instance__
+        if cls.__instance is None:
+            cls.__instance = dict.__new__(cls, *args, **kwargs)
+        return cls.__instance

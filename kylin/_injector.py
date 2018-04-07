@@ -28,9 +28,10 @@ class Inject(Callable):
     """
         class to recive the callable dependencies
     """
+    __injector__ = Injector
 
     def __init__(self, **dependencies):
         self.dependencies = dependencies
 
     def __call__(self, fun: Callable):
-        return wraps(fun).__call__(Injector(self.dependencies, fun))
+        return wraps(fun).__call__(self.__injector__(self.dependencies, fun))

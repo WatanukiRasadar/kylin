@@ -22,6 +22,6 @@ class Scope(Context):
         return super().get(item)
 
     def __new__(cls, *args, **kwargs):
-        if not hasattr(g, '__scope__'):
-            g.__scope__ = dict.__new__(cls)
-        return g.__scope__
+        if not hasattr(g, 'scope'):
+            g.scope = dict.__new__(cls)
+        return g.scope
