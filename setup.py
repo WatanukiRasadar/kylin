@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='kylin',
     version='1.1',
-    packages=['kylin'],
+    packages=['kylin', 'kylin.extras'],
     url='',
     license='MIT',
     author='Elielton Kremer',
