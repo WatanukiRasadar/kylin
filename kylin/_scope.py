@@ -1,5 +1,5 @@
+from contextlib import contextmanager
 from quart import g
-
 from ._context import Context
 from ._exceptions import ServiceNotFoundException
 
@@ -25,3 +25,12 @@ class Scope(Context):
         if not hasattr(g, 'scope'):
             g.scope = dict.__new__(cls)
         return g.scope
+
+    @classmethod
+    @contextmanager
+    def change_scope(cls, scope):
+        assert isinstance(scope, Scope)
+        old_scope = getattr(scope, 'scope')
+        g.scope = scope
+        yield
+        g.scope = old_scope
