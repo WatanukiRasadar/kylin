@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='kylin',
-    version='1.1',
+    version='1.2',
     packages=['kylin', 'kylin.extras'],
     url='',
     license='MIT',
