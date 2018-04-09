@@ -35,4 +35,6 @@ class Inject(Callable):
         self.dependencies = dependencies
 
     def __call__(self, fun: Callable):
-        return wraps(fun).__call__(self.__injector__(self.dependencies, fun))
+        def call(*args, **kwargs):
+            return self.__injector__(self.dependencies, fun).__call__(*args, **kwargs)
+        return wraps(fun).__call__(call)
